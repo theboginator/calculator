@@ -1,14 +1,14 @@
 /*
 Simple Rust calculator command line application
+Works with expressions. Nearly implements variables. Ran into some expression life errors.
 November 2018 by Jacob Bogner
 */
 use std::io::prelude::*;
 use std::collections::HashMap;
 use std::io;
 
-
 fn readinput() -> String { //Get string from keyboard
-    print!("Input string: ");
+    print!("\n");
     io::stdout().flush().ok().expect("Could not flush stdout");
     let mut input: String = String::new();
     let _ = std::io::stdin().read_line(&mut input);
@@ -16,8 +16,6 @@ fn readinput() -> String { //Get string from keyboard
     input.retain(|c| c != ' ');
     return input;
 }
-
-
 
 fn evaluate(input: String) -> f32 { //Take an expression and evaluate, return an answer
      //Split the input then we will extract the numbers and operator
@@ -54,12 +52,21 @@ fn evaluate(input: String) -> f32 { //Take an expression and evaluate, return an
 
 fn main(){
     let mut variable_map = HashMap::new(); //declare the variable hashmap
-    variable_map.insert(String::from("pi"), 3.14159); //make our first constant, pi
+    variable_map.insert("pi", 3.14159); //make our first constant, pi
 
     let mut input = readinput(); // Get input from the keyboard
 
     while input != "quit" {
         //input = prelimeval(input); //Remove variable assignments/replace variables with their value
+/*
+        if input.contains('='){
+            let v: Vec<&str> = input.to_string().split('=').collect();
+            let key: &str = v[0];
+            let valtostr: &str = v[1];
+            let val :f32 = valtostr.parse::<f32>().unwrap();
+            variable_map.insert(key, val);
+        }
+*/
 
         let output = evaluate(input); //Evaluate the remaining expression
 
@@ -71,21 +78,6 @@ fn main(){
     }
 
     for (key, value) in variable_map{
-        print!("{} / {}", key, value);
+        print!("{} / {}", key, value); //Print the variable map when done
     }
-
-    fn prelimeval(input: String) -> String { //Pull out any variable assignments or variable value requests and replace their value into input
-        if input.contains('='){
-            let v: Vec<&str> = input.split('=').collect();
-            let key: &str = v[0];
-            let valtostr: &str = v[1];
-            let val = valtostr.parse::<i32>().unwrap();
-
-            //variable_map.insert(key, val);
-        }
-
-        return input;
-
-    }
-
 }
